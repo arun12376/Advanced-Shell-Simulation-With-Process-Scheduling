@@ -173,7 +173,7 @@ public class Shell {
 
     // clear - wipe the terminal screen using an ANSI escape sequence
     private static boolean clear(List<String> args) {
-        System.out.print("[H[2J");
+        System.out.print("cleared");
         System.out.flush();
         return true;
     }
