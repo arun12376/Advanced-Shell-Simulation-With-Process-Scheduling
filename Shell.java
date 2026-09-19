@@ -134,6 +134,8 @@ public class Shell {
             case "jobs":  return listJobs(args);
             case "fg":    return fg(args);
             case "bg":    return bg(args);
+            case "rr":    return rr(args);
+            case "priority": return priority(args);
             case "help":  return help(args);
             default:      return false;
         }
@@ -473,6 +475,54 @@ public class Shell {
     }
 
     // ---------------------------------------------------------------
+    // scheduling simulations (Deliverable 2)
+    // ---------------------------------------------------------------
+
+    // rr <quantum> [burst...] - run the round-robin scheduler simulation.
+    // Without burst times the default demo jobs are used.
+    private static boolean rr(List<String> args) {
+        if (args.isEmpty()) {
+            System.out.println("rr: usage: rr <quantum> [burst time of each process]");
+            return true;
+        }
+
+        int quantum;
+        try {
+            quantum = Integer.parseInt(args.get(0));
+        } catch (NumberFormatException e) {
+            System.out.println("rr: '" + args.get(0) + "' is not a number");
+            return true;
+        }
+        if (quantum <= 0) {
+            System.out.println("rr: the quantum must be a positive number");
+            return true;
+        }
+
+        List<Integer> bursts = new ArrayList<>();
+        for (int i = 1; i < args.size(); i++) {
+            try {
+                bursts.add(Integer.parseInt(args.get(i)));
+            } catch (NumberFormatException e) {
+                System.out.println("rr: '" + args.get(i) + "' is not a number");
+                return true;
+            }
+        }
+
+        if (bursts.isEmpty()) {
+            RoundRobinScheduler.run(quantum);
+        } else {
+            RoundRobinScheduler.run(quantum, bursts);
+        }
+        return true;
+    }
+
+    // priority - run the priority scheduler simulation with preemption
+    private static boolean priority(List<String> args) {
+        PriorityScheduler.run();
+        return true;
+    }
+
+    // ---------------------------------------------------------------
     // small helpers
     // ---------------------------------------------------------------
 
@@ -516,7 +566,7 @@ public class Shell {
 
     private static void printWelcome() {
         System.out.println("============================================");
-        System.out.println("  Mini-OS Shell - Deliverable 1");
+        System.out.println("  Mini-OS Shell - Deliverable 2");
         System.out.println("  Type \"help\" to see the built-in commands.");
         System.out.println("  Type \"exit\" to quit.");
         System.out.println("============================================");
@@ -540,6 +590,8 @@ public class Shell {
         System.out.println("  jobs            list background jobs");
         System.out.println("  fg [job id]     wait for a background job to finish");
         System.out.println("  bg [job id]     show the state of a background job");
+        System.out.println("  rr <quantum> [bursts]  run the round-robin scheduling simulation");
+        System.out.println("  priority        run the priority scheduling simulation");
         System.out.println("  exit            leave the shell");
         System.out.println();
         System.out.println("Anything else is run as an external program.");

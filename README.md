@@ -1,18 +1,24 @@
-# Advanced Shell Simulation with Integrated OS Concepts
+# Advanced Shell Simulation With Process Scheduling
 
-A mini Unix-like shell written in Java that runs on Windows. It has built-in commands (cd, pwd, ls, cat, mkdir, rm, ...), hands everything else to the real OS, and tracks background jobs with jobs, fg, bg, and kill.
+Four Java classes: a mini shell with built-in commands and job control, plus two process scheduling simulations.
+
+- Shell.java - the shell itself, includes the rr and priority built-in commands
+- Job.java - one background job tracked by the shell
+- RoundRobinScheduler.java - round-robin scheduling with a configurable time quantum
+- PriorityScheduler.java - priority scheduling with a heap and preemption
 
 ## How to run
 
-You need Java 8 or newer.
+Compile all files:
 
-1. Open a terminal in this folder.
-2. Compile:
+    javac Shell.java Job.java RoundRobinScheduler.java PriorityScheduler.java
 
-       javac Shell.java Job.java
+Run the shell (type help for the command list, rr 2 for round-robin, priority for priority scheduling):
 
-3. Run:
+    java Shell
 
-       java Shell
+Or run a scheduler on its own:
 
-Type `help` to see the built-in commands and `exit` to quit. Add `&` at the end of a command to run it in the background.
+    java RoundRobinScheduler 2
+
+    java PriorityScheduler
